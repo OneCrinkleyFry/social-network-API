@@ -1,3 +1,4 @@
+const { nextTick } = require('process');
 const { User } = require('../models');
 
 const userController = {
@@ -66,6 +67,18 @@ const userController = {
             res.json(dbUserData);
         })
         .catch(err => res.status(400).json(err));
+   },
+
+   //delete a user
+   deleteUser({ params }, res) {
+      User.findById(params.id, function(err, user) {
+         if (err) return res.status(400).json(err);
+         else if (!user) return res.status(404).json({ message: 'No user found with this id!' });
+
+         user.remove();
+
+         res.json({ message: "This has been deleted!"});
+      })
    }
 }
 
