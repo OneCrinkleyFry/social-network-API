@@ -32,8 +32,8 @@ const UserSchema = new Schema(
       toJSON: {
          virtuals: true,
          getters: true
-     },
-     id: false
+      },
+      id: false
    }
 );
 
@@ -41,9 +41,19 @@ UserSchema.virtual('friendCount').get(function () {
    return this.friends.length;
 });
 
-UserSchema.pre('remove', function(next) {
-   Thought.remove({ _id: this._id }).exec();
-   next();
+UserSchema.post('findOneAndDelete', function(doc) {
+   const thoughts = doc.thoughts;
+   console.log(`-----------${thoughts}`);
+   for (let i = 0; i < thoughts.length; i++) {
+      Thought.findOneAndDelete({ _id: thoughts[i] })
+      .then(dbThoughtData => {
+         if (!dbThoughtData) {
+            return new Error('No thought with this id!')
+         }
+         return dbThoughtData;
+      })
+      .catch(err => res.json(err));
+   }
 });
 
 const User = model('User', UserSchema);

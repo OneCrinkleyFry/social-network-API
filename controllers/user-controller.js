@@ -65,14 +65,15 @@ const userController = {
    },
    //delete a user
    deleteUser({ params }, res) {
-      User.findById(params.id, function (err, user) {
-         if (err) return res.status(400).json(err);
-         else if (!user) return res.status(404).json({ message: 'No user found with this id!' });
-
-         user.remove();
-
-         res.json({ message: "This has been deleted!" });
-      })
+      User.findByIdAndDelete(params.id)
+         .then(dbUserData => {
+            if (!dbUserData) {
+               res.status(404).json({ message: 'No user found with this id!' });
+               return;
+            }
+            res.json(dbUserData);
+         })
+         .catch(err => res.json(err));
    },
    // add a friend
    addFriend({ params }, res) {
