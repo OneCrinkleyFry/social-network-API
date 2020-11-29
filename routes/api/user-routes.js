@@ -8,7 +8,6 @@ const {
    addFriend,
    removeFriend
 } = require('../../controllers/user-controller');
-const User = require('../../models/User');
 
 router
    .route('/')
