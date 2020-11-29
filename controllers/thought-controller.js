@@ -36,7 +36,7 @@ const thoughtController = {
          .then(({ _id }) => {
             console.log( _id );
             return User.findOneAndUpdate(
-               { username: body.username },
+               { _id: body.userId },
                { $push: { thoughts: _id } },
                { new: true }
             );
@@ -49,6 +49,18 @@ const thoughtController = {
             res.json(dbUserData);
          })
          .catch(err => res.json(err));
+   },
+   // remove thought
+   deleteThought({ params }, res) {
+      Thought.findOneAndDelete({ _id: params.id })
+      .then(dbThoughtData => {
+         if (!dbThoughtData) {
+            res.status(404).json({ message: 'No Thought with this id!' });
+            return;
+         }
+         res.json(dbThoughtData);
+      })
+      .catch(err => res.json(err));
    }
 };
 
