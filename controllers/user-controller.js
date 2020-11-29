@@ -1,8 +1,6 @@
-const { nextTick } = require('process');
 const { User } = require('../models');
 
 const userController = {
-
    // get all users
    getAllUsers(req, res) {
       User.find({})
@@ -22,7 +20,6 @@ const userController = {
             res.status(400).json(err);
          });
    },
-
    //get a single user by _id
    getUserById({ params }, res) {
       User.findOne({ _id: params.id })
@@ -48,14 +45,12 @@ const userController = {
             res.status(400).json(err);
          });
    },
-
    //create a user
    createUser({ body }, res) {
       User.create(body)
          .then(dbUserData => res.json(dbUserData))
          .catch(err => res.status(400).json(err));
    },
-
    //update a user
    updateUser({ params, body }, res) {
       User.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
@@ -68,7 +63,6 @@ const userController = {
          })
          .catch(err => res.status(400).json(err));
    },
-
    //delete a user
    deleteUser({ params }, res) {
       User.findById(params.id, function (err, user) {
@@ -80,7 +74,6 @@ const userController = {
          res.json({ message: "This has been deleted!" });
       })
    },
-
    // add a friend
    addFriend({ params }, res) {
       User.findOneAndUpdate(
@@ -97,7 +90,6 @@ const userController = {
       })
       .catch(err => res.json(err));
    },
-   
    // remove friend
    removeFriend({ params }, res) {
       User.findOneAndUpdate(
